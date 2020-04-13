@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.7.3/babel.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+</head>
+
+<body>
+    <div id="root">
+    </div>
+    <script type="text/babel">
+        class Student {
+            constructor(name, age, mark) {
+                this.name = name;
+                this.age = age;
+                this.mark = mark;
+            }
+        };
+
+        var arr = [];
+        arr.push(new Student("King", "19", "10"));
+        arr.push(new Student("LehaLoh", "18", "3.5"));
+        arr.push(new Student("GlebNelep", "19", "8.0"));
+        arr.push(new Student("stupidBoy", "18", "2.0"));
+        
+        var style1 = {
+            "background-color": "#C0C0C0"
+        };
+        var style2 = {
+            "background-color": "#DCDCDC"
+        };
+        var style3 = {
+            "color": "#FF0000",
+        };
+        var style4 ={
+            "color":"#00FF00"
+        }
+        var badMark = 4;
+
+        function Table(props) {
+            var rows = [];
+            var students = props.students;
+            for(var i = 0; i < students.length; i++)
+                rows.push(<Row student={students[i]} i={i}/>);
+            return <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>AverageMark</th>
+                </tr>
+                {rows}
+            </table>;
+        };
+
+        function Row(props) {
+            var student = props.student;
+            var flag = props.i;
+            var rowStyle;
+            var markStyle;
+            if(flag%2){
+                rowStyle=style1
+            }
+            else {
+                rowStyle=style2
+            }
+            if(student.mark<badMark){
+                markStyle=style3
+            }
+            else{
+                markStyle=style4
+            }
+            return <tr style={rowStyle}>
+                <td>{student.name}</td>
+                <td>{student.age}</td>
+                <td style={markStyle}>{student.mark}</td>
+            </tr>;
+            
+        };
+
+        ReactDOM.render(
+            <Table students={arr} />, document.getElementById("root")
+        );
+    </script>
+</body>
+
+</html>
