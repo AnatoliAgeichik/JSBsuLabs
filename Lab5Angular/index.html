@@ -1,0 +1,99 @@
+<html ng-app="SuperCar">
+    <head>
+        <title>Lab5</title>
+    </head>
+
+    <body ng-controller="controler">
+              <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>MaxSpeed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list.items">
+                    <td>{{item.name}}</td>
+                    <td>{{item.model}}</td>
+                    <td>{{item.price}}</td>
+                    <td>{{item.speed}}</td> 
+                    <td><button ng-click="edit(list.items.indexOf(item),name,model,price,speed)">Edit</button></td>
+                    <td><button ng-click="del(list.item.indexOf(item))">Del</button></td>                    
+                </tr>
+            </tbody>
+       </table>
+       <p>AvaragePrice: {{AvaragePrice}}</p>
+       <input type="input" value="car" ng-model="name" placeholder = "Name" />
+       <input type="input" value="super" ng-model="model" placeholder = "model" />
+       <input type="input" value="15000" ng-model="price" placeholder = "Price" />
+       <input type="input"  value="369" ng-model="speed" placeholder = "MaxSpeed" />
+       <button type="input" ng-click="add(name, model,price,speed)">Add</button>
+       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+            
+       <script>
+var model = {
+                items: [
+                   { name: "BMW", model: "x6", price: 159000, speed:280 }
+                   
+                ]
+            };
+            var App = angular.module("SuperCar", []);
+                App.controller("controler", function ($scope,$http) {
+                $scope.list = model;
+                
+                $http.get("http://localhost:3000/")
+                .then(function(response) {
+                    $scope.list.items = response.data;
+                });
+                
+                $scope.Avaredge=function(){
+                    var sum=0
+                                
+                    for(i = 0; i < $scope.list.items.length; i++)
+                    {
+                        sum += parseFloat($scope.list.items[i].price);
+                    }
+                    return sum / $scope.list.items.length;
+
+                }
+                $scope.AvaragePrice=$scope.Avaredge();
+                
+                $scope.add = function (name, model,price,speed) {
+                    //price = parseFloat(price); // преобразуем введенное значение к числу
+                    //speed=parseFloat(speed);
+                    //if(name != "" && !isNaN(price)&& !isNaN(speed)&& model !="") // если текст установлен и введено число, то добавляем
+                    //{
+                    $scope.list.items.push({ name: name, model:model, price:price, speed: speed });
+                    $scope.AvaragePrice=$scope.Avaredge();
+                    $scope.name="";
+                    $scope.model="";
+                    $scope.price="";
+                    $scope.speed="";
+                }
+                $scope.edit=function(index,name,model,price,speed){
+                    tmp={name:name,model:model,price:price,speed:speed}
+                    $scope.list.items[index]=tmp;
+                    $scope.name="";
+                    $scope.model="";
+                    $scope.price="";
+                    $scope.speed="";
+                    
+                $scope.AvaragePrice=$scope.Avaredge();
+
+                }
+                $scope.del=function(index){
+                    $scope.list.items.splice(index,1);
+                    
+                $scope.AvaragePrice=$scope.Avaredge();
+                $scope.name="";
+                    $scope.model="";
+                    $scope.price="";
+                    $scope.speed="";
+                }
+            });
+            </script>    
+    </body>
+
+</html>
